@@ -1,0 +1,37 @@
+# signalkit
+
+## API
+
+### Signals
+
+#### `var signal = new Signal(name)`
+
+Create a new signal with a given `name`.
+
+#### `signal.connect(fn)`
+
+Connect a supplied function so it will be called when this `Signal` is `emit`ted.
+
+Returns a function that can be called to cancel the connection.
+
+#### `signal.connect(object, methodName)`
+
+Connect a supplied object/method to this `Signal`, i.e. call `object[methodName]()` when signal is emitted. The method lookup is lazy, that is, `object[methodName]` is resolved each time the signal is fired.
+
+Returns a function that can be called to cancel the connection.
+
+#### `signal.emit(args...)`
+
+Emit this signal, invoking each connected function with the given arguments. All handlers are guaranteed to fire; any errors thrown by handlers will be caught and re-raised asynchronously.
+
+#### `signal.clear()`
+
+Remove all connections.
+
+### Delegates
+
+Coming soon.
+
+## TODO
+
+  * Async emit. Not sure if this should be specified at signal creation time or emission time.

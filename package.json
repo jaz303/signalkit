@@ -1,0 +1,16 @@
+{
+  "name": "signalkit",
+  "version": "0.0.0",
+  "description": "Signals & delegates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "signal",
+    "delegate"
+  ],
+  "author": "Jason Frame",
+  "license": "MIT"
+}
