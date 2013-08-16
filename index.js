@@ -59,3 +59,4 @@ Signal.prototype.clear = function() {
 // Exports
 
 exports.Signal = Signal;
+exports.signal = function(name) { return new Signal(name); }
