@@ -48,7 +48,7 @@ Signal.prototype.connect = function(target, action) {
         throw "signal connect expects either handler function or target/action pair";
     }
     this._listeners.push(handler);
-    return makeUnsubscriber(this.listeners, handler);
+    return makeUnsubscriber(this._listeners, handler);
 }
 
 Signal.prototype.clear = function() {

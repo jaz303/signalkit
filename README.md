@@ -1,5 +1,35 @@
 # signalkit
 
+Tiny signal/delegates library.
+
+## Example - Signals
+
+    var Signal = require('signalkit').Signal;
+    var signal = new Signal('foo');
+
+    var unsub1 = signal.connect(function(name) {
+        console.log("handler 1: " + name);
+    });
+
+    var foo = {
+        bar: function(name) {
+            console.log("handler 2: " + name);
+        }
+    };
+
+    var unsub2 = signal.connect(foo, 'bar');
+
+    console.log("emit fred...");
+    signal.emit("fred");
+
+    console.log("emit bob...");
+    unsub1();
+    signal.emit("bob");
+
+    console.log("emit alice...");
+    unsub2();
+    signal.emit("alice");
+
 ## API
 
 ### Signals
@@ -16,7 +46,7 @@ Returns a function that can be called to cancel the connection.
 
 #### `signal.connect(object, methodName)`
 
-Connect a supplied object/method to this `Signal`, i.e. call `object[methodName]()` when signal is emitted. The method lookup is lazy, that is, `object[methodName]` is resolved each time the signal is fired.
+Connect a supplied object/method to this `Signal`, i.e. call `object[methodName]()` when signal is emitted. The method lookup is lazy; that is, `object[methodName]` is resolved each time the signal is fired, rather than being bound at the time of connection.
 
 Returns a function that can be called to cancel the connection.
 
