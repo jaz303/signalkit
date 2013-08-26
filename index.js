@@ -23,16 +23,16 @@ function Signal(name) {
     this._listeners = [];
 }
 
+Signal.prototype.onError = function(err) {
+    setTimeout(function() { throw err; }, 0);
+}
+
 Signal.prototype.emit = function() {
     for (var ls = this._listeners, i = ls.length - 1; i >= 0; --i) {
         try {
             ls[i].apply(null, arguments);
         } catch (err) {
-            (function(e) {
-                setTimeout(function() {
-                    throw e;
-                }, 0);
-            })(err);
+            this.onError(err);
         }
     }
 }
