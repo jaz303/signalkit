@@ -56,13 +56,13 @@ Emit this signal, invoking each connected function with the given arguments. All
 
 #### `signal.clear()`
 
+Remove all connections.
+
 #### Error handling
 
 You can catch - and handle - any errors thrown during event handling by overriding `signal.onError`, which receives the thrown error as an argument. The default behaviour is to rethrow the error asynchronously.
 
 The default error handler for all signals can be changed by setting `Signal.prototype.onError`.
-
-Remove all connections.
 
 ### Delegates
 
