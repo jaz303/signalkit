@@ -1,8 +1,38 @@
 # signalkit
 
-Tiny signal/delegates library.
+Tiny signals library. Signals are an alternative to `EventEmitter` wherein each possible event is represented by a unique object to which listeners can be attached. There are a couple of benefits to this approach:
 
-## Example - Signals
+### Anonymous signal objects can be passed around independently of their owner object
+
+In the example below, `MyObserver` could be passed any signal at all:
+
+    function MyObserver(signal) {
+        signal.connect(function() {
+            // do something
+        })
+    }
+
+With `EventEmitter`, we'd need to attach to a fixed event of a given object, or pass in the event name explicitly. I find this less elegant.
+
+    function MyObserver(obj, eventName) {
+        obj.on(eventName || 'data', function() {
+            // do something
+        })
+    }
+
+### No subtle bugs caused by misspelt event names
+
+    obj.on('foobar', function() { ... });
+    obj.emit('foobaz'); // nothing happens
+
+Contrast with:
+
+    var obj = {};
+    obj.foobar = new Signal();
+    obj.foobar.connect(function() { ... });
+    obj.foobaz.emit(); // runtime error
+
+## Example
 
     var Signal = require('signalkit').Signal;
     var signal = new Signal('foo');
@@ -63,10 +93,6 @@ Remove all connections.
 You can catch - and handle - any errors thrown during event handling by overriding `signal.onError`, which receives the thrown error as an argument. The default behaviour is to rethrow the error asynchronously.
 
 The default error handler for all signals can be changed by setting `Signal.prototype.onError`.
-
-### Delegates
-
-Coming soon.
 
 ## TODO
 
