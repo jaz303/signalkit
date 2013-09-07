@@ -32,7 +32,9 @@ Signal.prototype.emit = function() {
         try {
             ls[i].apply(null, arguments);
         } catch (err) {
-            this.onError(err);
+            if (this.onError(err) === false) {
+                break;
+            }
         }
     }
 }
