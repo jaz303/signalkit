@@ -1,6 +1,12 @@
 //
 // Helpers
 
+if (typeof process !== 'undefined') {
+    var nextTick = process.nextTick;
+} else {
+    var nextTick = function(fn) { setTimeout(fn, 0); }
+}
+
 function makeUnsubscriber(listeners, handlerFn) {
     var cancelled = false;
     return function() {
@@ -24,7 +30,7 @@ function Signal(name) {
 }
 
 Signal.prototype.onError = function(err) {
-    setTimeout(function() { throw err; }, 0);
+    nextTick(function() { throw err; });
 }
 
 Signal.prototype.emit = function() {
