@@ -90,7 +90,7 @@ Remove all connections.
 
 #### Error handling
 
-You can catch - and handle - any errors thrown during event handling by overriding `signal.onError`, which receives the thrown error as an argument. The default behaviour is to rethrow the error asynchronously.
+You can catch - and handle - any errors thrown during event handling by overriding `signal.onError`, which receives the thrown error as an argument. Your error handler may return `false` to prevent any successive handlers from being fired. The default behaviour is to continue firing the remaining handlers and rethrow the error asynchronously.
 
 The default error handler for all signals can be changed by setting `Signal.prototype.onError`.
 
