@@ -80,6 +80,18 @@ Connect a supplied object/method to this `Signal`, i.e. call `object[methodName]
 
 Returns a function that can be called to cancel the connection.
 
+#### `signal.once(fn)`
+
+As per `signal.connect(fn)`, except that the function is called once and once only.
+
+Returns a function that can be called to cancel the connection.
+
+#### `signal.once(object, methodName)`
+
+As per `signal.connect(object, methodName)`, except that the method is called once and once only.
+
+Returns a function that can be called to cancel the connection.
+
 #### `signal.emit(args...)`
 
 Emit this signal, invoking each connected function with the given arguments. All handlers are guaranteed to fire; any errors thrown by handlers will be caught and re-raised asynchronously.
