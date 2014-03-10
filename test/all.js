@@ -160,3 +160,65 @@ ts('error handler should be called once for each error', function(assert) {
     assert.equals(errCount, 2);
 
 });
+
+ts('once should work with function callbacks', function(assert) {
+
+    var sig = new Signal();
+
+    var a = 0;
+    sig.once(function() { a = 1; });
+    sig.emit();
+
+    assert.equals(a, 1);
+
+});
+
+ts('once should work with target/action pairs', function(assert) {
+
+    var foo = {
+        a: 0,
+        bar: function() { this.a++; }
+    };
+
+    var sig = new Signal();
+
+    sig.once(foo, 'bar');
+    sig.emit();
+
+    assert.equals(foo.a, 1);
+
+});
+
+ts('once should fire once only', function(assert) {
+
+    var sig = new Signal();
+
+    var a = 0;
+
+    sig.once(function() { a++; });
+    
+    sig.emit();
+    sig.emit();
+    sig.emit();
+
+    assert.equals(a, 1);
+
+});
+
+ts('once should not fire if cancelled', function(assert) {
+
+    var sig = new Signal();
+
+    var a = 0;
+
+    var cancel = sig.once(function() { a++; });
+
+    cancel();
+
+    sig.emit();
+    sig.emit();
+    sig.emit();
+
+    assert.equals(a, 0);
+
+});

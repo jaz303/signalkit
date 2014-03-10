@@ -59,6 +59,20 @@ Signal.prototype.connect = function(target, action) {
     return makeUnsubscriber(this._listeners, handler);
 }
 
+Signal.prototype.once = function(target, action) {
+    var cancel = this.connect(function() {
+        if (target && action) {
+            target[action].apply(target, arguments);
+        } else if (typeof target === 'function') {
+            target.apply(null, arguments);
+        } else {
+            throw "signal connect expects either handler function or target/action pair";
+        }
+        cancel();
+    });
+    return cancel;
+}
+
 Signal.prototype.clear = function() {
     this._listeners = [];
 }
