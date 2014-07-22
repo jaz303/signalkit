@@ -26,7 +26,7 @@ function makeUnsubscriber(listeners, handlerFn) {
 
 function Signal(name) {
     this.name = name;
-    this._listeners = [];
+    this._listeners = null;
 }
 
 Signal.prototype.onError = function(err) {
@@ -34,6 +34,7 @@ Signal.prototype.onError = function(err) {
 }
 
 Signal.prototype.emit = function() {
+    if (!this._listeners) return;
     for (var ls = this._listeners, i = ls.length - 1; i >= 0; --i) {
         try {
             ls[i].apply(null, arguments);
@@ -46,6 +47,7 @@ Signal.prototype.emit = function() {
 }
 
 Signal.prototype.connect = function(target, action) {
+    if (!this._listeners) this._listeners = [];
     if (target && action) {
         var handler = function() {
             target[action].apply(target, arguments);
@@ -74,7 +76,7 @@ Signal.prototype.once = function(target, action) {
 }
 
 Signal.prototype.clear = function() {
-    this._listeners = [];
+    this._listeners = null;
 }
 
 //
