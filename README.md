@@ -64,9 +64,9 @@ Contrast with:
 
 ### Signals
 
-#### `var signal = new Signal(name)`
+#### `var signal = new Signal(name, [parent])`
 
-Create a new signal with a given `name`.
+Create a new signal with a given `name` and optional `parent`. If a `parent` is specified all calls to `emit()` will propagate recursively through the parent chain.
 
 #### `signal.connect(fn)`
 
@@ -95,6 +95,8 @@ Returns a function that can be called to cancel the connection.
 #### `signal.emit(args...)`
 
 Emit this signal, invoking each connected function with the given arguments. All handlers are guaranteed to fire; any errors thrown by handlers will be caught and re-raised asynchronously.
+
+The `emit()` call will propagate recursively through the signal's parent chain.
 
 #### `signal.clear()`
 

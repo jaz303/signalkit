@@ -222,3 +222,20 @@ ts('once should not fire if cancelled', function(assert) {
     assert.equals(a, 0);
 
 });
+
+ts('parent propagation', function(assert) {
+
+    var sigp = new Signal();
+    var sigc = new Signal(null, sigp);
+
+    var a = 0, b = 0;
+
+    sigp.connect(function(x) { a = x; });
+    sigp.connect(function(x) { b = x * 2; });
+
+    sigc.emit(5);
+
+    assert.ok(a === 5);
+    assert.ok(b === 10);
+
+});
