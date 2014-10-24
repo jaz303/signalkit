@@ -77,7 +77,12 @@ Signal.prototype.connect_c = function(target, action) {
 }
 
 Signal.prototype.disconnect = function(fn) {
-    return _remove(this._listeners, handler);
+    if (this._listeners) {
+        return _remove(this._listeners, fn);    
+    } else {
+        return false;
+    }
+    
 }
 
 Signal.prototype.once = function(target, action) {
