@@ -7,18 +7,24 @@ if (typeof process !== 'undefined') {
     var nextTick = function(fn) { setTimeout(fn, 0); }
 }
 
-function makeUnsubscriber(listeners, handlerFn) {
-    var cancelled = false;
-    return function() {
-        if (cancelled) return;
-        for (var i = listeners.length - 1; i >= 0; --i) {
-            if (listeners[i] === handlerFn) {
-                listeners.splice(i, 1);
-                cancelled = true;
-                break;
+function _makeHandler(target, action) {
+    if (action) {
+        return function() { target[action].apply(target, arguments); }
+    } else {
+        return target; // assume fn
+    }
+}
+
+function _remove(ary, item) {
+    if (ary) {
+        for (var ix = 0, len = ary.length; ix < len; ++ix) {
+            if (ary[ix] === item) {
+                ary.splice(ix, 1);
+                return true;
             }
         }
     }
+    return false;
 }
 
 //
@@ -55,31 +61,36 @@ Signal.prototype.emit = function() {
 }
 
 Signal.prototype.connect = function(target, action) {
-    if (!this._listeners) this._listeners = [];
-    if (target && action) {
-        var handler = function() {
-            target[action].apply(target, arguments);
-        }
-    } else if (typeof target === 'function') {
-        var handler = target;
-    } else {
-        throw "signal connect expects either handler function or target/action pair";
+    return this._connect(target, action);
+}
+
+Signal.prototype.connect_c = function(target, action) {
+    var handler = this._connect(target, action);
+
+    var listeners = this._listeners;
+    var removed = false;
+    return function() {
+        if (removed) return;
+        _remove(listeners, handler);
+        removed = true;
     }
-    this._listeners.push(handler);
-    return makeUnsubscriber(this._listeners, handler);
+}
+
+Signal.prototype.disconnect = function(fn) {
+    return _remove(this._listeners, handler);
 }
 
 Signal.prototype.once = function(target, action) {
-    var cancel = this.connect(function() {
-        if (target && action) {
-            target[action].apply(target, arguments);
-        } else if (typeof target === 'function') {
-            target.apply(null, arguments);
-        } else {
-            throw "signal connect expects either handler function or target/action pair";
-        }
-        cancel();
-    });
+    var handler = _makeHandler(target, action);
+    function inner() { cancel(); handler.call(null, arguments); }
+    var cancel = this.connect_c(inner);
+    return inner;
+}
+
+Signal.prototype.once_c = function(target, action) {
+    var handler = _makeHandler(target, action);
+    function inner() { cancel(); handler.call(null, arguments); }
+    var cancel = this.connect_c(inner);
     return cancel;
 }
 
@@ -88,7 +99,18 @@ Signal.prototype.clear = function() {
 }
 
 //
+// Private
+
+Signal.prototype._connect = function(target, action) {
+    var handler = _makeHandler(target, action);
+    if (!this._listeners) this._listeners = [];
+    this._listeners.push(handler);
+    return handler;
+}
+
+//
 // Exports
 
 module.exports = function(name) { return new Signal(name); }
 module.exports.Signal = Signal;
+

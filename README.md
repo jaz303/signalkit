@@ -69,28 +69,32 @@ Contrast with:
 Create a new signal with a given `name` and optional `parent`. If a `parent` is specified all calls to `emit()` will propagate recursively through the parent chain.
 
 #### `signal.connect(fn)`
+#### `signal.connect_c(fn)`
 
 Connect a supplied function so it will be called when this `Signal` is `emit`ted.
 
-Returns a function that can be called to cancel the connection.
+The `_c` suffixed version returns a function that can be called to cancel the connection.
 
 #### `signal.connect(object, methodName)`
+#### `signal.connect_c(object, methodName)`
 
 Connect a supplied object/method to this `Signal`, i.e. call `object[methodName]()` when signal is emitted. The method lookup is lazy; that is, `object[methodName]` is resolved each time the signal is fired, rather than being bound at the time of connection.
 
-Returns a function that can be called to cancel the connection.
+The `_c` suffixed version returns a function that can be called to cancel the connection.
 
 #### `signal.once(fn)`
+#### `signal.once_c(fn)`
 
 As per `signal.connect(fn)`, except that the function is called once and once only.
 
-Returns a function that can be called to cancel the connection.
+The `_c` suffixed version returns a function that can be called to cancel the connection.
 
 #### `signal.once(object, methodName)`
+#### `signal.once_c(object, methodName)`
 
 As per `signal.connect(object, methodName)`, except that the method is called once and once only.
 
-Returns a function that can be called to cancel the connection.
+The `_c` suffixed version returns a function that can be called to cancel the connection.
 
 #### `signal.emit(args...)`
 
