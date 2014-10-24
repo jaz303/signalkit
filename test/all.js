@@ -166,10 +166,10 @@ ts('once should work with function callbacks', function(assert) {
     var sig = new Signal();
 
     var a = 0;
-    sig.once_c(function() { a = 1; });
-    sig.emit();
+    sig.once_c(function(x, y, z) { a = x + y + z; });
+    sig.emit(1, 2, 3);
 
-    assert.equals(a, 1);
+    assert.equals(a, 6);
 
 });
 
@@ -177,15 +177,15 @@ ts('once should work with target/action pairs', function(assert) {
 
     var foo = {
         a: 0,
-        bar: function() { this.a++; }
+        bar: function(x, y, z) { this.a = x + y + z; }
     };
 
     var sig = new Signal();
 
     sig.once_c(foo, 'bar');
-    sig.emit();
+    sig.emit(1, 2, 3);
 
-    assert.equals(foo.a, 1);
+    assert.equals(foo.a, 6);
 
 });
 

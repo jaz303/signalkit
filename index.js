@@ -87,14 +87,14 @@ Signal.prototype.disconnect = function(fn) {
 
 Signal.prototype.once = function(target, action) {
     var handler = _makeHandler(target, action);
-    function inner() { cancel(); handler.call(null, arguments); }
+    function inner() { cancel(); handler.apply(null, arguments); }
     var cancel = this.connect_c(inner);
     return inner;
 }
 
 Signal.prototype.once_c = function(target, action) {
     var handler = _makeHandler(target, action);
-    function inner() { cancel(); handler.call(null, arguments); }
+    function inner() { cancel(); handler.apply(null, arguments); }
     var cancel = this.connect_c(inner);
     return cancel;
 }
