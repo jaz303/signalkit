@@ -1,19 +1,5 @@
-//
-// Helpers
-
-if (typeof process !== 'undefined') {
-    var nextTick = process.nextTick;
-} else {
-    var nextTick = function(fn) { setTimeout(fn, 0); }
-}
-
-function _makeHandler(target, action) {
-    if (action) {
-        return function() { target[action].apply(target, arguments); }
-    } else {
-        return target; // assume fn
-    }
-}
+var nextTick        = require('./private/next_tick');
+var _makeHandler    = require('./private/make_handler');
 
 function _remove(ary, item) {
     if (ary) {
@@ -116,6 +102,6 @@ Signal.prototype._connect = function(target, action) {
 //
 // Exports
 
-module.exports = function(name) { return new Signal(name); }
+module.exports = function(name, parent) { return new Signal(name, parent); }
 module.exports.Signal = Signal;
 
