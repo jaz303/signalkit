@@ -1,6 +1,6 @@
 {
   "name": "signalkit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Signals & delegates",
   "main": "index.js",
   "scripts": {
